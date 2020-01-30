@@ -1160,8 +1160,8 @@ void DNSSD_API DNSServiceRefDeallocate(DNSServiceRef sdRef)
         // when the source was cancelled, the fd was closed in the handler. Currently the source
         // is cancelled only when the mDNSResponder daemon dies
         else if (!sdRef->disp_queue) dnssd_close(sdRef->sockfd);
-#else
-        dnssd_close(sdRef->sockfd);
+#else           
+        DNSShutdownSocket(sdRef->sockfd);
 #endif
         // Free DNSRecords added in DNSRegisterRecord if they have not
         // been freed in DNSRemoveRecord
@@ -1179,6 +1179,31 @@ void DNSSD_API DNSServiceRefDeallocate(DNSServiceRef sdRef)
             FreeDNSServiceOp(p);
         }
     }
+    
+}
+
+int DNSShutdownSocket(dnssd_sock_t sd) {
+    char recvbuf[512];
+    int read_result;
+
+    // signal socket shutdown
+    int error = shutdown(sd, SD_SEND);
+    if (error != 0) {
+        syslog(LOG_WARNING, "dnssd_clientstub DNSServiceRefDeallocate shutdown failed with error %d", error);
+        closesocket(sd);
+        return -1;
+    }
+
+    // Receive until the peer closes the connection
+    do {
+        read_result = recv(sd, recvbuf, 512, 0);
+    } while (read_result > 0);
+
+    // close socket handle
+    if (closesocket(sd) != 0) {
+        return -1;
+    }
+    return 0;
 }
 
 DNSServiceErrorType DNSSD_API DNSServiceGetProperty(const char *property, void *result, uint32_t *size)
