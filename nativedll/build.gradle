@@ -1,0 +1,50 @@
+apply plugin: "c"
+apply plugin: "windows-resources"
+
+model {
+	
+
+    platforms {
+        x64 {
+            architecture "x86_64"
+        }
+    }
+    components {
+        nativedll(NativeLibrarySpec) {
+			targetPlatform "x64"
+
+			binaries.withType(NativeLibraryBinarySpec){
+			
+				// pass installed mfc to resources compiler
+				rcCompiler.args "/IC:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.24.28314\\atlmfc\\include"
+				
+				// build windows 
+				
+				cCompiler.args "/DUSE_TCP_LOOPBACK"
+				cCompiler.args "/DNOT_HAVE_SA_LEN"
+				cCompiler.args "/DWIN32"
+				cCompiler.args "/DWIN32_LEAN_AND_MEAN"
+				cCompiler.args "/D_USRDLL"
+				cCompiler.args "/D_WINDLL"
+				cCompiler.args "/DNDEBUG"
+				cCompiler.args "/DMDNS_DEBUGMSGS=0"
+				cCompiler.args "/GS"
+				cCompiler.args "/O2"
+				cCompiler.args "/D_MBCS"
+				
+				// 64bit only
+				linker.args "/machine:x64"
+				
+				// export functions
+				linker.args "/DEF:C:/Smartbow/misc/Bonjour/nativedll/src/nativedll/nativedll.def"
+				
+				// link necessary libraries
+				linker.args "WSock32.lib"
+                linker.args "ws2_32.lib"
+				linker.args "advapi32.lib"
+								
+			}
+        }
+    }
+}
+
