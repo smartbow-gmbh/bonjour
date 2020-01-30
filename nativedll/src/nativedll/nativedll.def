@@ -15,7 +15,7 @@
 ; limitations under the License.
 ;
 
-LIBRARY		dnssd
+LIBRARY		nativedll
 
 EXPORTS
 	DNSServiceRefSockFD

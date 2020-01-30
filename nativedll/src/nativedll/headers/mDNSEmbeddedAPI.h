@@ -3229,7 +3229,7 @@ extern mStatus    mDNSPlatformTCPConnect(TCPSocket *sock, const mDNSAddr *dst, m
 extern void       mDNSPlatformTCPCloseConnection(TCPSocket *sock);
 extern long       mDNSPlatformReadTCP(TCPSocket *sock, void *buf, unsigned long buflen, mDNSBool *closed);
 extern long       mDNSPlatformWriteTCP(TCPSocket *sock, const char *msg, unsigned long len);
-extern UDPSocket *mDNSPlatformUDPSocket(const mDNSIPPort requestedport);
+extern UDPSocket *mDNSPlatformUDPSocket(mDNS* const m, const mDNSIPPort requestedport);
 extern mDNSu16    mDNSPlatformGetUDPPort(UDPSocket *sock);
 extern void       mDNSPlatformUDPClose(UDPSocket *sock);
 extern mDNSBool   mDNSPlatformUDPSocketEncounteredEOF(const UDPSocket *sock);
@@ -3252,9 +3252,9 @@ extern void       mDNSPlatformTLSTearDownCerts(void);
 // Platforms that support unicast browsing and dynamic update registration for clients who do not specify a domain
 // in browse/registration calls must implement these routines to get the "default" browse/registration list.
 
-extern mDNSBool   mDNSPlatformSetDNSConfig(mDNSBool setservers, mDNSBool setsearch, domainname *const fqdn, DNameListElem **RegDomains,
+extern mDNSBool   mDNSPlatformSetDNSConfig(mDNS* const m, mDNSBool setservers, mDNSBool setsearch, domainname *const fqdn, DNameListElem **RegDomains,
                         DNameListElem **BrowseDomains, mDNSBool ackConfig);
-extern mStatus    mDNSPlatformGetPrimaryInterface(mDNSAddr *v4, mDNSAddr *v6, mDNSAddr *router);
+extern mStatus    mDNSPlatformGetPrimaryInterface(mDNS* const m, mDNSAddr *v4, mDNSAddr *v6, mDNSAddr *router);
 extern void       mDNSPlatformDynDNSHostNameStatusChanged(const domainname *const dname, const mStatus status);
 
 extern void       mDNSPlatformSetAllowSleep(mDNSBool allowSleep, const char *reason);
