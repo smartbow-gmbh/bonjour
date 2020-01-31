@@ -19,7 +19,6 @@ model {
 				rcCompiler.args "/IC:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.24.28314\\atlmfc\\include"
 				
 				// build windows 
-				
 				cCompiler.args "/DUSE_TCP_LOOPBACK"
 				cCompiler.args "/DNOT_HAVE_SA_LEN"
 				cCompiler.args "/DWIN32"
@@ -36,7 +35,7 @@ model {
 				linker.args "/machine:x64"
 				
 				// export functions
-				linker.args "/DEF:C:/Smartbow/misc/Bonjour/nativedll/src/nativedll/nativedll.def"
+				linker.args "/DEF:${rootProject.projectDir}\\nativedll\\src\\nativedll\\nativedll.def"
 				
 				// link necessary libraries
 				linker.args "WSock32.lib"
