@@ -20,12 +20,12 @@ version = '0.1.0'
 
 jar{
 	copy{
-		from('../nativedll/build/libs/nativedll/shared')
+		from("${project(':nativedll').buildDir}/libs/nativedll/shared")
 		into('/src/main/resources')
 		include('*.dll')
 	}
 }
-
+/*
 uploadArchives{
 	repositories{
 		mavenDeployer {
@@ -37,3 +37,4 @@ uploadArchives{
 	}
 }
 uploadArchives.dependsOn build
+*/
