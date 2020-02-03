@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 
 buildscript {
   repositories {
@@ -17,15 +18,19 @@ dependencies{
 
 version = '0.1.0'
 
-jar{/*
-    bnd '''
-	-exportcontents: at.smartbow.tools.bonjour.dnssd
-	-sources: true
-	-include: ../nativedll/build/libs/nativedll/shared/nativedll.dll
-	'''
-*/
+jar{
 	copy{
 		from('../nativedll/build/libs/nativedll/shared/nativedll.dll')
 		into('/src/main/resources')
+	}
+}
+
+uploadArchives{
+	repositories{
+		mavenDeployer {
+			repository(url: "${repoUrl}"){
+				authentication(userName: "${repoUser}", password: "${repoPassword}")
+			}
+		}
 	}
 }
