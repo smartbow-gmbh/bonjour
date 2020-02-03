@@ -30,7 +30,9 @@ uploadArchives{
 		mavenDeployer {
 			repository(url: "${repoUrl}"){
 				authentication(userName: "${repoUser}", password: "${repoPassword}")
+				pom.groupId = "com.smartbow"
 			}
 		}
 	}
 }
+uploadArchives.dependsOn build
