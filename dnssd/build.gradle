@@ -20,8 +20,9 @@ version = '0.1.0'
 
 jar{
 	copy{
-		from('../nativedll/build/libs/nativedll/shared/nativedll.dll')
+		from('../nativedll/build/libs/nativedll/shared')
 		into('/src/main/resources')
+		include('*.dll')
 	}
 }
 
