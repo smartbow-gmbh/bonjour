@@ -11,19 +11,21 @@ buildscript {
 }
 
 apply plugin: 'biz.aQute.bnd.builder'
-
+evaluationDependsOn(':nativedll') 
 dependencies{
 	build.dependsOn ':nativedll:nativedllSharedLibrary'
+	implementation project( path: ':nativedll', configuration:'merge')
 }
 
 version = '0.1.0'
 
 jar{
-	copy{
-		from("${project(':nativedll').buildDir}/libs/nativedll/shared")
-		into('/src/main/resources')
-		include('*.dll')
-	}
+	project(':nativedll').configurations.merge.artifacts.forEach{ artifact -> 
+		copy{
+			from(artifact.getFile())
+			into('/src/main/resources')
+		}
+	
 }
 
 uploadArchives{
