@@ -17,7 +17,7 @@ steps:
   inputs:
     gradleWrapperFile: 'gradlew'
     options: '-PvisualStudioPath=$(VISUALSTUDIO)  -PrepoUrl=$(ARTIFACTORY)/$(REPO) -PrepoUser=$(ARTIFACTORY_USER) -PrepoPassword=$(ARTIFACTORY_PASSWORD)'
-    tasks: 'build uploadArchives'
+    tasks: 'build uploadArchives --debug'
     publishJUnitResults: false
     javaHomeOption: 'JDKVersion'
     sonarQubeRunAnalysis: false

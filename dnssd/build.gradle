@@ -13,7 +13,6 @@ buildscript {
 apply plugin: 'biz.aQute.bnd.builder'
 evaluationDependsOn(':nativedll') 
 dependencies{
-	build.dependsOn ':nativedll:nativedllSharedLibrary'
 	implementation project( path: ':nativedll', configuration:'merge')
 }
 
@@ -21,13 +20,19 @@ version = '0.1.0'
 
 jar{
 	project(':nativedll').configurations.merge.artifacts.forEach{ artifact -> 
+		println('found file')
+		println(artifact.getFile())
+
 		copy{
+			println ('copying')
 			from(artifact.getFile())
 			into('/src/main/resources')
 		}
 	}
+
 }
 
+/*
 uploadArchives{
 	repositories{
 		mavenDeployer {
@@ -39,3 +44,4 @@ uploadArchives{
 	}
 }
 uploadArchives.dependsOn build
+*/
