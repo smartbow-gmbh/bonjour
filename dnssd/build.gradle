@@ -28,13 +28,13 @@ jar{
 			from(artifact.getFile())
 			into("${rootProject.projectDir}\\dnssd\\src\\main\\resources")
 		}
-		println (file("/src/main/resources/nativedll.dll").isFile())
-		println (new File(".").absolutePath)
+		println (file("${rootProject.projectDir}\\dnssd\\src\\main\\resources\\nativedll.dll").isFile())
+		println (new File("${rootProject.projectDir}\\dnssd\\src\\main\\resources\\.").absolutePath)
 	}
 
 }
 
-
+/*
 uploadArchives{
 	repositories{
 		mavenDeployer {
@@ -46,3 +46,4 @@ uploadArchives{
 	}
 }
 uploadArchives.dependsOn build
+*/
