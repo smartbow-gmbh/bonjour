@@ -25,7 +25,7 @@ jar{
 		include('*.dll')
 	}
 }
-/*
+
 uploadArchives{
 	repositories{
 		mavenDeployer {
@@ -37,4 +37,3 @@ uploadArchives{
 	}
 }
 uploadArchives.dependsOn build
-*/
