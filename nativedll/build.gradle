@@ -16,7 +16,7 @@ model {
 			binaries.withType(NativeLibraryBinarySpec){
 			
 				// pass installed mfc to resources compiler
-				rcCompiler.args "/I${visualStudioPath}\\VC\\Tools\\MSVC\\29709.97\\atlmfc\\include"
+				rcCompiler.args "/I${visualStudioPath}\\atlmfc\\include"
 				
 				// build windows 
 				cCompiler.args "/DUSE_TCP_LOOPBACK"
