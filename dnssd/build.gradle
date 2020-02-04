@@ -11,30 +11,26 @@ buildscript {
 }
 
 apply plugin: 'biz.aQute.bnd.builder'
-evaluationDependsOn(':nativedll') 
-dependencies{
-	implementation project( path: ':nativedll', configuration:'merge')
+
+// register dummy task
+def dllFilesTask = tasks.register('buildDllFiles')
+def nativeProject = project(':nativedll');
+
+// lazily register dependencies/output files to the dummy task
+nativeProject.tasks.whenTaskAdded { task ->
+	if(task.name.equals('linkNativedllSharedLibrary')) {
+		def fileTask = tasks.getByName('buildDllFiles');
+		fileTask.dependsOn(task)
+		fileTask.outputs.files(task.outputs.files.filter{f -> f.name.endsWith('.dll')})
+	}
 }
 
 version = '0.1.0'
-
 jar{
-	project(':nativedll').configurations.merge.artifacts.forEach{ artifact -> 
-		println('found file')
-		println(artifact.getFile())
-
-		copy{
-			println ('copying')
-			from(artifact.getFile())
-			into("${rootProject.projectDir}\\dnssd\\src\\main\\resources")
-		}
-		println (file("${rootProject.projectDir}\\dnssd\\src\\main\\resources\\nativedll.dll").isFile())
-		println (new File("${rootProject.projectDir}\\dnssd\\src\\main\\resources\\.").absolutePath)
-	}
-
+	dependsOn dllFilesTask
+	from dllFilesTask
 }
 
-/*
 uploadArchives{
 	repositories{
 		mavenDeployer {
@@ -46,4 +42,3 @@ uploadArchives{
 	}
 }
 uploadArchives.dependsOn build
-*/

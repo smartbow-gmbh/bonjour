@@ -1,15 +1,5 @@
 apply plugin: "c"
 apply plugin: "windows-resources"
-apply plugin : 'base'
-
-configurations{
-	merge
-}
-
-artifacts{
-	merge file("${rootProject.projectDir}\\nativedll\\build\\libs\\nativedll\\shared\\nativedll.dll")
-}
-
 
 model {
 
@@ -55,4 +45,3 @@ model {
         }
     }
 }
-
