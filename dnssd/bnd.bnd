@@ -1,2 +1,3 @@
+Bundle-SymbolicName: com.smartbow.dnssd
 Export-Package: \
 	com.apple.dnssd\
