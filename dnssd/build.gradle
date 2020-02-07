@@ -1,44 +1,47 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: "c"
+apply plugin: "windows-resources"
 
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:4.2.0'
-  }
-}
+model {
 
-apply plugin: 'biz.aQute.bnd.builder'
+    platforms {
+        x64 {
+            architecture "x86_64"
+        }
+    }
+    components {
+        dnssd(NativeLibrarySpec) {
+			targetPlatform "x64"
 
-// register dummy task
-def dllFilesTask = tasks.register('buildDllFiles')
-def nativeProject = project(':nativedll');
-
-// lazily register dependencies/output files to the dummy task
-nativeProject.tasks.whenTaskAdded { task ->
-	if(task.name.equals('linkNativedllSharedLibrary')) {
-		def fileTask = tasks.getByName('buildDllFiles');
-		fileTask.dependsOn(task)
-		fileTask.outputs.files(task.outputs.files.filter{f -> f.name.endsWith('.dll')})
-	}
-}
-
-version = '0.1.0'
-jar{
-	dependsOn dllFilesTask
-	from dllFilesTask
-}
-
-uploadArchives{
-	repositories{
-		mavenDeployer {
-			repository(url: "${repoUrl}"){
-				authentication(userName: "${repoUser}", password: "${repoPassword}")
-				pom.groupId = "com.smartbow"
+			binaries.withType(NativeLibraryBinarySpec){
+			
+				// pass installed mfc to resources compiler
+				rcCompiler.args "/I${visualStudioPath}\\atlmfc\\include"
+				
+				// build windows 
+				cCompiler.args "/DUSE_TCP_LOOPBACK"
+				cCompiler.args "/DNOT_HAVE_SA_LEN"
+				cCompiler.args "/DWIN32"
+				cCompiler.args "/DWIN32_LEAN_AND_MEAN"
+				cCompiler.args "/D_USRDLL"
+				cCompiler.args "/D_WINDLL"
+				cCompiler.args "/DNDEBUG"
+				cCompiler.args "/DMDNS_DEBUGMSGS=0"
+				cCompiler.args "/GS"
+				cCompiler.args "/O2"
+				cCompiler.args "/D_MBCS"
+				
+				// 64bit only
+				linker.args "/machine:x64"
+				
+				// export functions
+				linker.args "/DEF:${rootProject.projectDir}\\dnssd\\src\\dnssd\\dnssd.def"
+				
+				// link necessary libraries
+				linker.args "WSock32.lib"
+                linker.args "ws2_32.lib"
+				linker.args "advapi32.lib"
+								
 			}
-		}
-	}
+        }
+    }
 }
-uploadArchives.dependsOn build

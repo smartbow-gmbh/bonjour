@@ -6,6 +6,5 @@ build
 
 /dnssd/bin
 /dnssd/build
-/nativedll/bin
-/nativedll/build
-/dnssd/src/main/resources/nativedll.dll
+/javalib/bin
+/javalib/build

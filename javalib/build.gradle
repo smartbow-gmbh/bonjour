@@ -1,0 +1,45 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:4.2.0'
+  }
+}
+
+apply plugin: 'biz.aQute.bnd.builder'
+
+// register dummy task
+def dllFilesTask = tasks.register('buildDllFiles')
+def nativeProject = project(':dnssd');
+
+// lazily register dependencies/output files to the dummy task
+nativeProject.tasks.whenTaskAdded { task ->
+	if(task.name.equals('linkDnssdSharedLibrary')) {
+		def fileTask = tasks.getByName('buildDllFiles');
+		fileTask.dependsOn(task)
+		fileTask.outputs.files(task.outputs.files.filter{f -> f.name.endsWith('.dll')})
+	}
+}
+
+version = '0.1.0'
+jar{
+	baseName="dnssd"
+	dependsOn dllFilesTask
+	from dllFilesTask
+}
+
+uploadArchives{
+	repositories{
+		mavenDeployer {
+			repository(url: "${repoUrl}"){
+				authentication(userName: "${repoUser}", password: "${repoPassword}")
+				pom.groupId = "com.smartbow"
+			}
+		}
+	}
+}
+uploadArchives.dependsOn build
