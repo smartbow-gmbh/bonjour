@@ -520,9 +520,9 @@ class AppleDNSSD extends DNSSD {
   static {
 
     try {
-      System.load(DllProvider.getDLL("dnssd"));
+      System.load(DNSSDDllProvider.getDLL("dnssd"));
 
-      System.load(DllProvider.getDLL("jdns_sd"));
+      System.load(DNSSDDllProvider.getDLL("jdns_sd"));
     } catch (IOException e) {
       throw new InternalError("Could not load native libraries ", e);
     }
