@@ -25,7 +25,7 @@ nativeProject.tasks.whenTaskAdded { task ->
 	}
 }
 
-version = '0.3.0'
+version = '0.3.1'
 jar{
 	baseName="dnssd"
 	dependsOn dllFilesTask
